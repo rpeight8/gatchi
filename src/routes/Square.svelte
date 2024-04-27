@@ -17,6 +17,7 @@
 		justify-content: center;
 		align-items: center;
 		background-color: burlywood;
+		overflow: hidden;
 	}
 
 	button {
