@@ -34,8 +34,8 @@
 
 	.enchanced-img {
 		pointer-events: none;
-		width: 100%;
-		height: 100%;
+		width: 20em;
+		height: 20em;
 		object-fit: contain; /* Maintains the aspect ratio; use 'cover' to fill the entire cell */
 		display: block; /* Removes bottom margin/gap beneath the image */
 	}

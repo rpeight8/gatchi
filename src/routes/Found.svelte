@@ -17,9 +17,9 @@
 		gap: 0.4em;
 	}
 	.enchanced-img {
-		font-size: 5em;
-		width: 2em;
-		height: 2em;
+		font-size: 2em;
+		width: 3em;
+		height: 3em;
 		object-fit: contain; /* Maintains the aspect ratio; use 'cover' to fill the entire cell */
 		display: block; /* Removes bottom margin/gap beneath the image */
 	}
