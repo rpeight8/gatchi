@@ -1,7 +1,9 @@
 <script lang="ts">
+	import { send } from './transitions';
 	export let selected = false;
 	export let found = false;
 	export let pic: string;
+	export let group: 'first' | 'second';
 </script>
 
 <div class="square" class:flipped={selected}>
@@ -9,8 +11,8 @@
 
 	<div class="background" />
 	{#if !found}
-		<img src="https://lucide.dev/logo.dark.svg" alt="An alt text" />
-		<!-- <enhanced:img src={pic} class="enchanced-img" alt="An alt text" /> -->
+		<img src={pic} alt="An alt text" out:send={{ key: `${pic}:${group}` }} />
+		<!-- <enhanced:img src={pic} class="enchanced-img" alt="An alt text" out:send={{ key: pic }} /> -->
 	{/if}
 </div>
 
@@ -19,7 +21,6 @@
 		display: flex;
 		justify-content: center;
 		align-items: center;
-		/* overflow: hidden; */
 		transition: transform 0.5s;
 		transform-style: preserve-3d;
 	}
@@ -48,8 +49,12 @@
 		border: 0.5em solid #eee;
 	}
 	img {
-		transform: rotateY(180deg);
+		/* transform: rotateY(180deg); */
+		pointer-events: none;
 		backface-visibility: hidden;
+		width: 20em;
+		height: 20em;
+		object-fit: contain;
 	}
 
 	/* .enchanced-img {

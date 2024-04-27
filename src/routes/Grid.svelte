@@ -42,6 +42,7 @@
 			}}
 			selected={first === i || second === i}
 			found={found.includes(pic)}
+			group={grid.indexOf(pic) === i ? 'first' : 'second'}
 		/>
 	{/each}
 </div>
