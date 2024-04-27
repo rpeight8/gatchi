@@ -7,8 +7,8 @@
 <div class="square" class:flipped={selected}>
 	{#if !found}
 		<enhanced:img src={pic} class="enchanced-img" alt="An alt text" />
+		<button on:click />
 	{/if}
-	<button on:click />
 </div>
 
 <style>

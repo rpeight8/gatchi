@@ -4,6 +4,8 @@
 	import type { Level } from './levels';
 	import { shuffle } from '../utils/shuffle';
 	import Found from './Found.svelte';
+	import Countdown from './Countdown.svelte';
+	import { onMount } from 'svelte';
 
 	// easy mode
 	let level = levels[0];
@@ -11,6 +13,9 @@
 	let size = level.size;
 	let grid = shuffle(create_grid(level));
 	let found: string[] = [];
+	let remaining: number = level.duration;
+	let duration: number = level.duration;
+	let playing: boolean = false;
 
 	function create_grid(level: Level) {
 		const picsCopy = [...level.pics];
@@ -24,10 +29,32 @@
 
 		return pairs;
 	}
+
+	function countdown() {
+		const now = Date.now();
+		let remaining_at_start = remaining;
+
+		loop();
+
+		function loop() {
+			if (playing) return;
+			requestAnimationFrame(loop);
+
+			remaining = remaining_at_start - (Date.now() - now);
+
+			if (remaining <= 0) {
+				playing = false;
+			}
+		}
+	}
+
+	onMount(countdown);
 </script>
 
 <div class="game">
-	<div class="info"></div>
+	<div class="info">
+		<Countdown duration={level.duration} {remaining} />
+	</div>
 	<div class="grid-container">
 		<Grid
 			{grid}
@@ -55,7 +82,6 @@
 	.info {
 		width: 80em;
 		height: 10em;
-		background-color: red;
 	}
 
 	.grid-container {
