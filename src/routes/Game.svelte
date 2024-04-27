@@ -2,13 +2,14 @@
 	import Grid from './Grid.svelte';
 	import { levels } from './levels';
 	import type { Level } from './levels';
+	import { shuffle } from '../utils/shuffle';
 
 	// easy mode
 	let level = levels[0];
 
 	let size = level.size;
-	let grid = create_grid(level);
-	let found = [];
+	let grid = shuffle(create_grid(level));
+	let found: string[] = [];
 
 	function create_grid(level: Level) {
 		const picsCopy = [...level.pics];
@@ -27,9 +28,17 @@
 <div class="game">
 	<div class="info"></div>
 	<div class="grid-container">
-		<Grid {grid}/>
+		<Grid
+			{grid}
+			on:found={(e) => {
+				found = [...found, e.detail];
+			}}
+			{found}
+		/>
 	</div>
-	<div class="info"></div>
+	<div class="info">
+    
+  </div>
 </div>
 
 <style>
@@ -39,7 +48,7 @@
 		justify-content: center;
 		align-items: center;
 		height: 100%;
-		font-size: min(1vmin, 0.5rem);
+		font-size: min(1vmin, 0.3rem);
 	}
 
 	.info {
