@@ -85,7 +85,6 @@
 	}
 
 	.grid-container {
-		background-color: #2196f3;
 		width: 80em;
 		height: 80em;
 	}

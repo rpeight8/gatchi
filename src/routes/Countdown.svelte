@@ -11,10 +11,11 @@
 			height="24"
 			viewBox="0 0 24 24"
 			fill="none"
-			stroke="currentColor"
+			stroke="#cccccc"
 			stroke-width="2"
 			stroke-linecap="round"
 			stroke-linejoin="round"
+			class="lucide lucide-circle-pause"
 			><circle cx="12" cy="12" r="10" /><line x1="10" x2="10" y1="15" y2="9" /><line
 				x1="14"
 				x2="14"
@@ -41,6 +42,8 @@
 		font-size: 8em;
 		width: 1em;
 		height: 1em;
+		background: transparent;
+		border: none;
 	}
 
 	button > svg {
