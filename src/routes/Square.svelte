@@ -1,14 +1,14 @@
 <script lang="ts">
-	export let pic: string;
 	export let selected = false;
 	export let found = false;
+	export let pic: string;
 </script>
 
 <div class="square" class:flipped={selected}>
-	<button on:click />
 	{#if !found}
-		<img src={`./images/${pic}.png`} alt={pic} />
+		<enhanced:img src={pic} class="enchanced-img" alt="An alt text" />
 	{/if}
+	<button on:click />
 </div>
 
 <style>
@@ -23,14 +23,19 @@
 		position: absolute;
 		width: 100%;
 		height: 100%;
+		opacity: 0;
 	}
 
-	.flipped button {
+	.flipped {
 		background-color: yellowgreen;
 		transform: rotateY(180deg);
 	}
 
-	img {
+	.enchanced-img {
 		pointer-events: none;
+		width: 100%;
+		height: 100%;
+		object-fit: contain; /* Maintains the aspect ratio; use 'cover' to fill the entire cell */
+		display: block; /* Removes bottom margin/gap beneath the image */
 	}
 </style>

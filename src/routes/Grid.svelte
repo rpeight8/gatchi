@@ -25,6 +25,10 @@
 					second = i;
 					if (grid[first] === grid[second]) {
 						dispatch('found', pic);
+						timeout = setTimeout(() => {
+							first = -1;
+							second = -1;
+						}, 1000);
 					} else {
 						timeout = setTimeout(() => {
 							first = -1;
@@ -45,9 +49,10 @@
 <style>
 	.grid {
 		display: grid;
-		grid-template-columns: repeat(4, 1fr);
-		grid-template-rows: repeat(4, 1fr);
+		grid-template-columns: repeat(4, minmax(min(17em, 100%), 1fr));
+		grid-template-rows: repeat(4, minmax(min(17em, 100%), 1fr));
 		gap: 0.4em;
 		height: 100%;
+		width: 100%;
 	}
 </style>

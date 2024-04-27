@@ -6,6 +6,15 @@ interface Level {
 	pics: string[];
 }
 
+import billyBike from '../assets/images/Billy-bike.webp?enhanced';
+import raySmile from '../assets/images/Ray-smile.webp?enhanced';
+import steveSmile from '../assets/images/Steve-smile.webp?enhanced';
+import steveSmile2 from '../assets/images/Steve-smile-2.webp?enhanced';
+import steveWink from '../assets/images/Steve-wink.webp?enhanced';
+import vanLeather from '../assets/images/Van-leather.webp?enhanced';
+import ricardoSmile from '../assets/images/Ricardo-smile.webp?enhanced';
+import dannyRespect from '../assets/images/Danny-respect.webp?enhanced';
+
 let nextId = 1;
 
 const levels: Level[] = [
@@ -14,7 +23,16 @@ const levels: Level[] = [
 		label: 'Easy',
 		size: 4,
 		duration: 60 * 1000,
-		pics: ['🍎', '🍌', '🍒', '🍇', '🍓', '🍑', '🍍', '🥝', '🥭']
+		pics: [
+			billyBike,
+			raySmile,
+			steveSmile,
+			steveSmile2,
+			steveWink,
+			vanLeather,
+			ricardoSmile,
+			dannyRespect
+		]
 	},
 	{
 		id: nextId++,
