@@ -1,55 +1,49 @@
 <script lang="ts">
+	import { flip } from 'svelte/animate';
 	import { receive } from './transitions';
+	import { fade } from 'svelte/transition';
 
-	export let found: string[] = [];
+	export let found: string[];
 </script>
 
 <div class="found">
-	{#each found as pic}
-		<div class="pair">
-			<img src={pic} alt="An alt text" in:receive={{ key: `${pic}:first` }} />
-			<img src={pic} alt="An alt text" in:receive={{ key: `${pic}:second` }} />
+	{@debug found}
+	{#each found as pic (pic)}
+		<div in:fade={{ delay: 500 }} animate:flip={{ duration: 200, delay: 500 }} class="pair">
+			<img alt={pic} src={pic} in:receive={{ key: `${pic}:a` }} />
+			<img alt={pic} src={pic} in:receive={{ key: `${pic}:b` }} />
 		</div>
-		<!-- <enhanced:img src={pic} class="enchanced-img" alt="An alt text" in:receive={{ key: pic }} /> -->
 	{/each}
 </div>
 
 <style>
 	.found {
 		display: flex;
+		flex-wrap: wrap;
 		justify-content: center;
 		align-items: center;
-		flex-wrap: wrap;
-		gap: 0.4em;
-		filter: drop-shadow(0.2em 0.2em 0.5em rgba(0, 0, 0, 0.2));
-		padding-top: 1.5em;
-		border-radius: 50%;
+		gap: 0.5em;
+		z-index: 3;
+		filter: drop-shadow(0.2em 0.4em 0.6em rgba(0, 0, 0, 0.1));
 	}
 
 	.pair {
-		font-size: 2em;
-		width: 3em;
-		height: 3em;
-		background: white;
 		display: flex;
-		justify-content: center;
 		align-items: center;
+		justify-content: center;
+		font-size: max(2.5em, calc(80em / (var(--size) * var(--size))));
+		width: 1.5em;
+		aspect-ratio: 1;
+		background: var(--bg-1);
+		border-radius: 50%;
 	}
-	/* .enchanced-img {
-		font-size: 2em;
-		width: 3em;
-		height: 3em;
-		object-fit: contain;
-		display: block;
-	} */
 
 	img {
-		position: absolute;
-		left: 0;
-		top: 0;
-		width: 100%;
-		height: 100%;
-		object-fit: contain;
 		display: block;
+		position: absolute;
+		width: 1em;
+		height: 1em;
+		line-height: 1;
+		aspect-ratio: 1;
 	}
 </style>

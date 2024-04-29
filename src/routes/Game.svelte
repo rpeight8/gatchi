@@ -1,97 +1,103 @@
 <script lang="ts">
-	import Grid from './Grid.svelte';
-	import { levels } from './levels';
-	import type { Level } from './levels';
-	import { shuffle } from '../utils/shuffle';
-	import Found from './Found.svelte';
 	import Countdown from './Countdown.svelte';
-	import { createEventDispatcher, onMount } from 'svelte';
-
-	// easy mode
-	let level = levels[0];
-
-	let size = level.size;
-	let grid = shuffle(create_grid(level));
-	let found: string[] = [];
-	let remaining: number = level.duration;
-	let duration: number = level.duration;
-	let playing: boolean = false;
+	import Grid from './Grid.svelte';
+	import Found from './Found.svelte';
+	import { shuffle } from '../utils/shuffle';
+	import { createEventDispatcher } from 'svelte';
+	import type { Level } from './levels';
 
 	const dispatch = createEventDispatcher();
 
+	let size: number;
+	let grid: string[] = [];
+	let found: string[] = [];
+	let duration: number;
+	let remaining: number;
+	let playing: boolean;
+
 	export function start(level: Level) {
 		size = level.size;
-		grid = shuffle(create_grid(level));
-		remaining = level.duration;
-		duration = level.duration;
+		remaining = duration = level.duration;
+
+		const sliced = level.pics.slice();
+		const pairs: string[] = [];
+
+		for (let i = 0; i < (size * size) / 2; i += 1) {
+			const index = Math.floor(Math.random() * sliced.length);
+			const pic = sliced[index];
+			sliced.splice(index, 1);
+			pairs.push(pic);
+		}
+
+		// repeat the set
+		grid = shuffle([...pairs, ...pairs]);
+		found = [];
 
 		resume();
 	}
 
-	function resume() {
+	export function resume() {
 		playing = true;
 		countdown();
 
-		dispatch('start');
-	}
-
-	function create_grid(level: Level) {
-		const picsCopy = [...level.pics];
-		const pairs: string[] = [];
-
-		for (let i = 0; i < level.size ** 2 / 2; i++) {
-			const randomIndex = Math.floor(Math.random() * picsCopy.length);
-			const pic = picsCopy.splice(randomIndex, 1)[0];
-			pairs.push(pic, pic);
-		}
-
-		return pairs;
+		dispatch('play');
 	}
 
 	function countdown() {
-		const now = Date.now();
-		let remaining_at_start = remaining;
-
-		loop();
+		const start = Date.now();
+		const remaining_at_start = remaining;
 
 		function loop() {
 			if (!playing) return;
+
 			requestAnimationFrame(loop);
 
-			remaining = remaining_at_start - (Date.now() - now);
+			remaining = remaining_at_start - (Date.now() - start);
 
 			if (remaining <= 0) {
-				dispatch('lose');
 				playing = false;
+				dispatch('lose');
 			}
 		}
+
+		loop();
 	}
 </script>
 
 <div class="game" style="--size: {size}">
 	<div class="info">
-		<Countdown
-			duration={level.duration}
-			{remaining}
-			on:click={() => {
-				dispatch('pause');
-				playing = false;
-			}}
-		/>
+		{#if playing}
+			<Countdown
+				{remaining}
+				{duration}
+				on:click={() => {
+					playing = false;
+					dispatch('pause');
+				}}
+			/>
+		{/if}
 	</div>
-	<div class="grid-container">
-		<Grid
-			{grid}
-			on:found={(e) => {
-				found = [...found, e.detail];
 
-				if (found.length === (size * size) / 2) {
-					dispatch('win');
-				}
-			}}
-			{found}
-		/>
+	<div class="grid">
+		{#key grid}
+			<Grid
+				{grid}
+				{found}
+				on:found={(event) => {
+					found = [...found, event.detail.pic];
+
+					if (found.length === (size * size) / 2) {
+						playing = false;
+						setTimeout(() => {
+							playing = false;
+							dispatch('win');
+						}, 1000);
+					}
+				}}
+			/>
+		{/key}
 	</div>
+
 	<div class="info">
 		<Found {found} />
 	</div>
@@ -103,17 +109,39 @@
 		flex-direction: column;
 		justify-content: center;
 		align-items: center;
+		font-size: min(1vmin, 0.5em);
+		gap: 2em;
 		height: 100%;
-		font-size: min(1vmin, 0.3rem);
+	}
+
+	.grid {
+		display: grid;
+		grid-template-columns: repeat(var(--size), 1fr);
+		grid-template-rows: repeat(var(--size), 1fr);
+		grid-gap: 1em;
+		width: 80em;
+		aspect-ratio: 1;
+		perspective: 100vw;
+		z-index: 2;
 	}
 
 	.info {
+		display: flex;
+		flex-direction: column;
+		justify-content: center;
+		align-items: center;
 		width: 80em;
 		height: 10em;
 	}
 
-	.grid-container {
-		width: 80em;
-		height: 80em;
+	@media (min-aspect-ratio: 1/1) {
+		.game {
+			flex-direction: row-reverse;
+		}
+
+		.info {
+			width: 10em;
+			height: 80em;
+		}
 	}
 </style>

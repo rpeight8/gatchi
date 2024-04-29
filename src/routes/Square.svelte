@@ -1,69 +1,86 @@
 <script lang="ts">
 	import { send } from './transitions';
-	export let selected = false;
-	export let found = false;
-	export let pic: string;
-	export let group: 'first' | 'second';
+
+	export let value: string;
+	export let selected: boolean;
+	export let found: boolean;
+	export let group: 'a' | 'b';
 </script>
 
-<div class="square" class:flipped={selected}>
-	<button on:click />
+<div class="square" class:flipped={selected || found}>
+	<button on:click disabled={selected || found} />
 
-	<div class="background" />
+	<div class="background" class:found />
 	{#if !found}
-		<img src={pic} alt="An alt text" out:send={{ key: `${pic}:${group}` }} />
-		<!-- <enhanced:img src={pic} class="enchanced-img" alt="An alt text" out:send={{ key: pic }} /> -->
+		<img alt={value} src={value} out:send={{ key: `${value}:${group}` }} />
 	{/if}
 </div>
 
 <style>
 	.square {
 		display: flex;
-		justify-content: center;
+		width: 100%;
+		height: 100%;
 		align-items: center;
-		transition: transform 0.5s;
+		justify-content: center;
+		transition: filter 0.2s;
 		transform-style: preserve-3d;
-	}
-	.flipped {
 		transform: rotateY(180deg);
+		transition: transform 0.4s;
+		user-select: none;
 	}
+
+	.square * {
+		backface-visibility: hidden;
+	}
+
 	button {
 		position: absolute;
 		width: 100%;
 		height: 100%;
-		backface-visibility: hidden;
-		border: 0;
-		background-color: #eee;
+		border: none;
+		display: flex;
+		justify-content: center;
+		align-items: center;
+		background: var(--bg-2);
 		border-radius: 1em;
-		font-size: inherit;
+		transform: rotateY(180deg);
+		-webkit-tap-highlight-color: transparent;
+	}
+
+	button:disabled {
+		color: inherit;
+	}
+
+	.flipped {
+		transform: rotateY(0);
+		z-index: 2;
 	}
 
 	.background {
 		position: absolute;
-		background-color: white;
-		transform: rotateY(180deg);
-		backface-visibility: hidden;
 		width: 100%;
 		height: 100%;
+		background: var(--bg-1);
+		border: 2px solid var(--accent);
 		border-radius: 1em;
-		border: 0.5em solid #eee;
+		transition: border 0.2s;
+		pointer-events: none;
 	}
+
+	.background.found {
+		border: 2px solid var(--bg-2);
+	}
+
 	img {
-		/* transform: rotateY(180deg); */
+		display: block;
+		font-size: 6em;
+		width: 100%;
+		height: 100%;
+		line-height: 1;
+		z-index: 2;
+		aspect-ratio: 1;
+		padding: 0.1em;
 		pointer-events: none;
-		backface-visibility: hidden;
-		width: min(20em, 100%);
-		height: min(20em, 100%);
-		object-fit: contain;
 	}
-
-	/* .enchanced-img {
-		width: 20em;
-		height: 20em;
-		object-fit: contain;
-	}
-
-	picture {
-		pointer-events: none;
-	} */
 </style>

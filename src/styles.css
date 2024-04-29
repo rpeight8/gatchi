@@ -5,6 +5,16 @@
 	box-sizing: border-box;
 }
 
+:root {
+	--bg-1: #fff;
+	--bg-2: #eee;
+	--bg-3: #777;
+	--fg: #222;
+	--card-border: #222;
+	--card-border-found: #777;
+	--accent: hsl(315, 66%, 37%);
+}
+
 html,
 body {
 	margin: 0;
@@ -22,8 +32,20 @@ body {
 		'Open Sans',
 		'Helvetica Neue',
 		sans-serif;
+	background: var(--bg-1);
+	color: var(--fg);
 }
 
 h1 {
 	font-family: Grandstander;
+}
+
+@media (prefers-color-scheme: dark) {
+	:root {
+		--bg-1: #111;
+		--bg-2: #444;
+		--bg-3: #666;
+		--fg: #eee;
+		--accent: hsl(275, 1040%, 57%);
+	}
 }
