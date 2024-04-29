@@ -5,7 +5,7 @@
 	import { shuffle } from '../utils/shuffle';
 	import Found from './Found.svelte';
 	import Countdown from './Countdown.svelte';
-	import { onMount } from 'svelte';
+	import { createEventDispatcher, onMount } from 'svelte';
 
 	// easy mode
 	let level = levels[0];
@@ -16,6 +16,24 @@
 	let remaining: number = level.duration;
 	let duration: number = level.duration;
 	let playing: boolean = false;
+
+	const dispatch = createEventDispatcher();
+
+	export function start(level: Level) {
+		size = level.size;
+		grid = shuffle(create_grid(level));
+		remaining = level.duration;
+		duration = level.duration;
+
+		resume();
+	}
+
+	function resume() {
+		playing = true;
+		countdown();
+
+		dispatch('start');
+	}
 
 	function create_grid(level: Level) {
 		const picsCopy = [...level.pics];
@@ -37,25 +55,29 @@
 		loop();
 
 		function loop() {
-			if (playing) return;
+			if (!playing) return;
 			requestAnimationFrame(loop);
 
 			remaining = remaining_at_start - (Date.now() - now);
 
 			if (remaining <= 0) {
+				dispatch('lose');
 				playing = false;
 			}
 		}
 	}
-
-	onMount(countdown);
 </script>
 
-<div class="game">
+<div class="game" style="--size: {size}">
 	<div class="info">
-		<Countdown duration={level.duration} {remaining} on:click={() => {
-
-    }}/>
+		<Countdown
+			duration={level.duration}
+			{remaining}
+			on:click={() => {
+				dispatch('pause');
+				playing = false;
+			}}
+		/>
 	</div>
 	<div class="grid-container">
 		<Grid
@@ -63,9 +85,9 @@
 			on:found={(e) => {
 				found = [...found, e.detail];
 
-        if (found.length === size * size / 2) {
-          
-        }
+				if (found.length === (size * size) / 2) {
+					dispatch('win');
+				}
 			}}
 			{found}
 		/>

@@ -52,8 +52,8 @@
 		/* transform: rotateY(180deg); */
 		pointer-events: none;
 		backface-visibility: hidden;
-		width: 20em;
-		height: 20em;
+		width: min(20em, 100%);
+		height: min(20em, 100%);
 		object-fit: contain;
 	}
 

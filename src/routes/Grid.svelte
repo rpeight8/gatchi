@@ -50,8 +50,8 @@
 <style>
 	.grid {
 		display: grid;
-		grid-template-columns: repeat(4, minmax(min(17em, 100%), 1fr));
-		grid-template-rows: repeat(4, minmax(min(17em, 100%), 1fr));
+		grid-template-columns: repeat(var(--size), minmax(5em, 1fr));
+		grid-template-rows: repeat(var(--size), minmax(5em, 1fr));
 		gap: 0.5em;
 		height: 100%;
 		width: 100%;
