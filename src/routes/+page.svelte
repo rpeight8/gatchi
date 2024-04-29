@@ -11,7 +11,7 @@
 </script>
 
 <svelte:head>
-	<title>gatchi</title>
+	<title>GATCHI</title>
 	<meta name="description" content="match the gachi game" />
 </svelte:head>
 
